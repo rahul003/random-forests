@@ -16,7 +16,7 @@ class node:
 		return
 
 class tree:
-	def __init__(self,rows, kfeatures, maxDepth, numClasses, minEx=10):
+	def __init__(self,rows, kfeatures, numClasses, maxDepth=10, minEx=10):
 		self.rows = rows
 		self.root = node(numpy.arange(0,len(rows)), 0)
 		self.kfeatures=kfeatures
@@ -43,7 +43,7 @@ class tree:
  	def build(self, nodeobj, depth):
  		rowindices = nodeobj.rowindices
  		#print depth,len(rowindices)
-
+ 		#print self.rows
  		#if cross depth, return
  		if depth>=self.maxDepth:
  			return None
@@ -178,7 +178,7 @@ class tree:
 				else:
 					prob = self.getProb(node)
 			elif node.right is None:
-				#print 'went left'
+				#prin2t 'went left'
 				if example[node.decisionOf]<node.threshold:
 					node = node.left
 				else:
@@ -214,10 +214,8 @@ def get_threshold(col_values):
 	#print r,'\n'
 	return r
 
-def train(mydata,numTrees,numClasses):
+def train(mydata,numTrees,kfeatures,numClasses):
 	
-	kfeatures = 6
-	maxdepth = 10
 	trees = []
 	
 	for i in range(0,numTrees):
@@ -227,7 +225,7 @@ def train(mydata,numTrees,numClasses):
 		#print n
 		#gen random subset of dataexamples of size n
 		bagged = numpy.random.choice(ar, n)
-		newTree = tree(my_data[bagged],kfeatures,maxdepth,numClasses)
+		newTree = tree(my_data[bagged],kfeatures,numClasses)
 		newTree.build(newTree.root,0)
 		print 'saving model',i
 		newTree.savemodel('models/'+str(i)+'.txt')
@@ -239,7 +237,7 @@ def test(models,X,numClasses):
 	#print allModelsProbs
 	#allModelsProbs = []
 	for i in range(0,len(models)):
-		models[i].printtree(models[i].root)
+		#models[i].printtree(models[i].root)
 		t = models[i].predict(X)
 		for j in range(len(X)):
 			for k in range(0,numClasses):
@@ -301,21 +299,21 @@ if __name__ == "__main__":
 	#print my_data.shape
 	numTrees = 10
 	numClasses = 10
-
-	treeModels = loadmodels(folder,numTrees)
+	kfeatures = 4
+	#treeModels = loadmodels(folder,numTrees)
 	#s = time.time()
-	#treeModels = train(my_data[:,:],numTrees, numClasses)
+	treeModels = train(my_data[:,:],numTrees,kfeatures, numClasses)
 	#t = time.time()
 	#print 'time',t-s
-	test_data = genfromtxt('data/pendigits.test', delimiter=',')
 	
+
+	test_data = genfromtxt('data/pendigits.test', delimiter=',')
 	allyhats = test(treeModels,test_data[:,:-1],numClasses)
 	#print allyhats
 	yhat = majorityPrediction(allyhats)
 	#print 'gotyhat'
 	#print avgprobs
-	y = test_data[:,-1]
+	#y = test_data[:,-1]
 	#print y
 	#print accuracy(yhat,y)
-	#treeModels[0].predict(my_data[:,])
-	#probabilities = test(treeModels)
+	

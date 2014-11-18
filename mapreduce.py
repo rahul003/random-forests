@@ -16,7 +16,7 @@ y = test_data[:,-1]
 def mapfn(dataid,data):
 	import forest
 	import numpy
-	k = 6
+	k = 4
 	md = 10
 	numClass = 10
 	train_d = data[0]
@@ -40,7 +40,7 @@ def reducefn(key,pred):
 	result = 0
 	blocksize = 500
 	blockpred=pred
-	numTrees = 2
+	numTrees = 10
 	numClasses = 10
 	#print key,'\n\n',pred
 	#len(blockpred)
@@ -68,9 +68,11 @@ def reducefn(key,pred):
 	#print blockClassperTree
 	return blockClassFinal
 
+numTrees = 10
+
 s = time.time()
 bagged = {}
-for i in range(0,10):
+for i in range(0,numTrees):
 	ar = numpy.arange(len(my_data))
 	n = len(ar)
 	bagged[i] = (my_data[numpy.random.choice(ar, n)],test_data)
