@@ -16,7 +16,7 @@ class node:
 		return
 
 class tree:
-	def __init__(self,rows, kfeatures, numClasses, maxDepth=10, minEx=10):
+	def __init__(self,rows, kfeatures, numClasses, maxDepth=10, minEx=5):
 		self.rows = rows
 		self.root = node(numpy.arange(0,len(rows)), 0)
 		self.kfeatures=kfeatures
@@ -227,8 +227,8 @@ def train(mydata,numTrees,kfeatures,numClasses):
 		bagged = numpy.random.choice(ar, n)
 		newTree = tree(my_data[bagged],kfeatures,numClasses)
 		newTree.build(newTree.root,0)
-		print 'saving model',i
-		newTree.savemodel('models/'+str(i)+'.txt')
+		#print 'saving model',i
+		#newTree.savemodel('models/'+str(i)+'.txt')
 		trees.append(newTree)
 	return trees
 
@@ -297,7 +297,7 @@ if __name__ == "__main__":
 	folder = 'models'
 	my_data = genfromtxt('data/pendigits.train', delimiter=',')
 	#print my_data.shape
-	numTrees = 10
+	numTrees = 50
 	numClasses = 10
 	kfeatures = 4
 	#treeModels = loadmodels(folder,numTrees)
@@ -305,7 +305,6 @@ if __name__ == "__main__":
 	treeModels = train(my_data[:,:],numTrees,kfeatures, numClasses)
 	#t = time.time()
 	#print 'time',t-s
-	
 
 	test_data = genfromtxt('data/pendigits.test', delimiter=',')
 	allyhats = test(treeModels,test_data[:,:-1],numClasses)

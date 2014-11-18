@@ -68,7 +68,28 @@ def reducefn(key,pred):
 	#print blockClassperTree
 	return blockClassFinal
 
-numTrees = 10
+
+def accuracy(yhat,y):
+	correct = 0
+	for i in range(0,len(yhat)):
+		if yhat[i]==y[i]:
+			correct+=1
+	print correct, len(yhat)
+	return correct/len(yhat)
+	# for i in range(0,len(y)):
+	# 	if probs[i][1]>probs[i][0] and y[i]==1:
+	# 		correct+=1
+	# 	elif probs[i][0]>probs[i][1] and y[i]==0:
+	# 		correct+=1
+		#what to do when equal
+
+
+	#print correct
+	#print len(y)
+	#print (float)(correct/len(y))
+	return correct/len(y)
+
+numTrees = 50
 
 s = time.time()
 bagged = {}

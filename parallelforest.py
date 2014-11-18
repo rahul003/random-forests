@@ -19,6 +19,26 @@ from multiprocessing import Queue
 #         f.build(f.root,0)
 #         probs = f.predict(self.test_data)
 #         return probs
+def accuracy(yhat,y):
+    correct = 0
+    for i in range(0,len(yhat)):
+        if yhat[i]==y[i]:
+            correct+=1
+    print correct, len(yhat)
+    return correct/len(yhat)
+    # for i in range(0,len(y)):
+    #   if probs[i][1]>probs[i][0] and y[i]==1:
+    #       correct+=1
+    #   elif probs[i][0]>probs[i][1] and y[i]==0:
+    #       correct+=1
+        #what to do when equal
+
+
+    #print correct
+    #print len(y)
+    #print (float)(correct/len(y))
+    return correct/len(y)
+
 
 def ProcessTree(data, i, out_q):
     #print data
@@ -44,7 +64,7 @@ if __name__=="__main__":
     my_data = genfromtxt('data/pendigits.train', delimiter=',')
     test_data = genfromtxt('data/pendigits.test', delimiter=',')
     
-    numTrees = 10
+    numTrees = 50
     numClasses = 10
     k = 4
     
@@ -101,6 +121,8 @@ if __name__=="__main__":
             #print tem
             finalPredictions = numpy.add(finalPredictions,tem)
     yhat = numpy.argmax(finalPredictions,axis=1)
+    y = test_data[:,-1]
+    print accuracy(yhat,y)
     #print len(yhat)
     for j in jobs:
         j.join()
@@ -115,7 +137,7 @@ if __name__=="__main__":
     
     #allyhats = test(treeModels,test_data[:,:-1],numClasses)
     #yhat = majorityPrediction(allyhats)
-    #y = test_data[:,-1]
+    
     
     #print y
     #print accuracy(yhat,y)
