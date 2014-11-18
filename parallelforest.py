@@ -98,7 +98,7 @@ if __name__=="__main__":
             finalPredictions = out_q.get()
         else:
             tem = out_q.get()
-            print tem
+            #print tem
             finalPredictions = numpy.add(finalPredictions,tem)
     yhat = numpy.argmax(finalPredictions,axis=1)
     #print len(yhat)
